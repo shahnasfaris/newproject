@@ -1,0 +1,36 @@
+{% extends 'marketplace/base.html' %}
+{% block title %}Customer Orders{% endblock %}
+
+{% block content %}
+<h2>Orders by {{ customer.username }}</h2>
+
+<a href="{% url 'manage_customers' %}" class="btn btn-secondary mb-3">
+    ← Back to Customers
+</a>
+
+<table class="table table-bordered">
+    <thead class="table-dark">
+        <tr>
+            <th>Order ID</th>
+            <th>Total</th>
+            <th>Status</th>
+            <th>Date</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for o in orders %}
+        <tr>
+            <td>#{{ o.id }}</td>
+            <td>₹ {{ o.total }}</td>
+            <td>{{ o.status }}</td>
+            <td>{{ o.created_at|date:"d M Y" }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="4" class="text-center">No orders found</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

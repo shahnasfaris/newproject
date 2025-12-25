@@ -1,0 +1,20 @@
+{% extends 'marketplace/base.html' %}
+{% block title %}Respond to Query{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h3>Respond to Query</h3>
+    <p><strong>From:</strong> {{ query.customer.username }}</p>
+    <p><strong>Product:</strong> {{ query.product.name }}</p>
+    <p><strong>Message:</strong> {{ query.message }}</p>
+
+    <form method="post">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label>Your Response</label>
+            <textarea name="response" class="form-control" rows="4" required>{{ query.response }}</textarea>
+        </div>
+        <button type="submit" class="btn btn-success">Send Response</button>
+    </form>
+</div>
+{% endblock %}

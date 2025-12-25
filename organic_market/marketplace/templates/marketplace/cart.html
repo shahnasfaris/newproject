@@ -1,0 +1,44 @@
+{% extends 'marketplace/base.html' %}
+{% block title %}My Cart{% endblock %}
+
+{% block content %}
+<h2>My Cart</h2>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Product</th>
+            <th>Qty</th>
+            <th>Price</th>
+            <th>Total</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in cart_items %}
+        <tr>
+            <td>{{ item.product.name }}</td>
+            <td>
+                <form action="{% url 'update_cart' item.id %}" method="POST">
+                    {% csrf_token %}
+                    <input type="number" name="quantity" value="{{ item.quantity }}" class="form-control w-50">
+            </td>
+            <td>${{ item.product.price }}</td>
+            <td>${{ item.total_price }}</td>
+            <td>
+                    <button class="btn btn-primary btn-sm">Update</button>
+                </form>
+
+                <a href="{% url 'remove_cart' item.id %}" class="btn btn-danger btn-sm mt-2">Remove</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<div class="text-end">
+    <h4>Grand Total: ${{ total_amount }}</h4>
+    <a href="{% url 'checkout' %}" class="btn btn-success">Checkout</a>
+</div>
+
+{% endblock %}

@@ -1,0 +1,131 @@
+{% extends 'marketplace/base.html' %}
+{% load static %}
+
+{% block title %}Add Product{% endblock %}
+
+{% block content %}
+<div class="container">
+
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+
+      <!-- Header -->
+      <div class="text-center mb-4">
+        <h2 class="fw-bold text-success">➕ Add New Product</h2>
+        <p class="text-muted">
+          Fill in the details below to list your product in the market
+        </p>
+      </div>
+
+      <!-- Card -->
+      <div class="card add-product-card shadow-lg border-0">
+        <div class="card-body p-4 p-md-5">
+
+          <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <!-- Category -->
+            <div class="mb-4">
+              <label class="form-label fw-semibold">
+                <i class="bi bi-tags text-success"></i>
+                {{ form.category.label }}
+              </label>
+              {{ form.category }}
+            </div>
+
+            <!-- Product Name -->
+            <div class="mb-4">
+              <label class="form-label fw-semibold">
+                <i class="bi bi-basket text-success"></i>
+                {{ form.name.label }}
+              </label>
+              {{ form.name }}
+            </div>
+
+            <!-- Description -->
+            <div class="mb-4">
+              <label class="form-label fw-semibold">
+                <i class="bi bi-card-text text-success"></i>
+                {{ form.description.label }}
+              </label>
+              {{ form.description }}
+            </div>
+
+            <!-- Price & Stock -->
+            <div class="row">
+              <div class="col-md-6 mb-4">
+                <label class="form-label fw-semibold">
+                  <i class="bi bi-currency-rupee text-success"></i>
+                  {{ form.price.label }}
+                </label>
+                {{ form.price }}
+              </div>
+              <div class="col-md-6 mb-4">
+                <label class="form-label fw-semibold">
+                  <i class="bi bi-box-seam text-success"></i>
+                  {{ form.stock.label }}
+                </label>
+                {{ form.stock }}
+              </div>
+            </div>
+
+            <!-- Image -->
+            <div class="mb-4">
+              <label class="form-label fw-semibold">
+                <i class="bi bi-image text-success"></i>
+                {{ form.image.label }}
+              </label>
+              {{ form.image }}
+            </div>
+
+            <!-- Buttons -->
+            <div class="d-flex justify-content-between align-items-center mt-4">
+              <button type="submit" class="btn btn-success btn-lg px-4 shadow-sm">
+                <i class="bi bi-check-circle"></i> Create Product
+              </button>
+
+              <a href="{% url 'list_products' %}" class="btn btn-outline-secondary">
+                Cancel
+              </a>
+            </div>
+
+          </form>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Custom Styles -->
+<style>
+.add-product-card {
+  border-radius: 25px;
+  background: linear-gradient(180deg, #ffffff, #f8f9fa);
+}
+
+.add-product-card input,
+.add-product-card select,
+.add-product-card textarea {
+  border-radius: 12px;
+  padding: 10px 14px;
+}
+
+.add-product-card input:focus,
+.add-product-card select:focus,
+.add-product-card textarea:focus {
+  box-shadow: 0 0 0 0.2rem rgba(25, 135, 84, 0.2);
+  border-color: #198754;
+}
+
+.add-product-card textarea {
+  min-height: 120px;
+}
+
+button i {
+  margin-right: 5px;
+}
+</style>
+
+{% endblock %}

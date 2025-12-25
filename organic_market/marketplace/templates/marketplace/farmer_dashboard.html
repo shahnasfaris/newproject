@@ -1,0 +1,183 @@
+{% extends 'marketplace/base.html' %}
+{% load static %}
+{% block title %}Farmer Dashboard{% endblock %}
+
+{% block content %}
+<div class="container">
+
+  <!-- Header -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold text-success">🌾 Farmer Dashboard</h2>
+    <a href="{% url 'add_product' %}" class="btn btn-success btn-lg shadow-sm add-btn">
+      <i class="bi bi-plus-circle"></i> Add Product
+    </a>
+  </div>
+
+  <!-- Stats Cards -->
+  <div class="row g-4 mb-4">
+
+    <div class="col-md-4">
+      <div class="card stat-card shadow-sm h-100">
+        <div class="card-body">
+          <i class="bi bi-box-seam fs-2 text-success"></i>
+          <h6 class="text-muted mt-2">Your Products</h6>
+          <h2 class="fw-bold text-success">{{ my_products.count }}</h2>
+          <a href="{% url 'list_products' %}" class="stat-link">
+            Manage products <i class="bi bi-arrow-right"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="card stat-card shadow-sm h-100">
+        <div class="card-body">
+          <i class="bi bi-cart-check fs-2 text-primary"></i>
+          <h6 class="text-muted mt-2">Orders</h6>
+          <h2 class="fw-bold text-primary">{{ order_items|length }}</h2>
+          <a href="{% url 'track_orders' %}" class="stat-link">
+            View orders <i class="bi bi-arrow-right"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="card stat-card shadow-sm h-100">
+        <div class="card-body">
+          <i class="bi bi-chat-dots fs-2 text-warning"></i>
+          <h6 class="text-muted mt-2">Customer Queries</h6>
+          <h2 class="fw-bold text-warning">{{ queries.count }}</h2>
+          <a href="{% url 'customer_queries' %}" class="stat-link">
+            Respond now <i class="bi bi-arrow-right"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Recent Products + Side Panel -->
+  <div class="row g-4">
+
+    <!-- Products Table -->
+    <div class="col-md-8">
+      <div class="card shadow-sm rounded-4">
+        <div class="card-body">
+          <h5 class="fw-bold mb-3">🧺 Recent Products</h5>
+
+          <div class="table-responsive">
+            <table class="table align-middle">
+              <thead class="table-light">
+                <tr>
+                  <th>Image</th>
+                  <th>Name</th>
+                  <th>Stock</th>
+                  <th>Price</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for p in my_products|slice:":8" %}
+                <tr>
+                  <td style="width:90px;">
+                    {% if p.image %}
+                      <img src="{{ p.image.url }}" class="img-fluid rounded shadow-sm">
+                    {% else %}
+                      <img src="{% static 'images/placeholder.png' %}" class="img-fluid rounded">
+                    {% endif %}
+                  </td>
+                  <td class="fw-semibold">{{ p.name }}</td>
+                  <td>{{ p.stock }}</td>
+                  <td class="text-success fw-bold">${{ p.price }}</td>
+                  <td>
+                    <span class="badge bg-success-subtle text-success">
+                      {{ p.status|capfirst }}
+                    </span>
+                  </td>
+                  <td>
+                    <a href="{% url 'edit_product' p.id %}" class="btn btn-sm btn-outline-success action-btn">
+                      <i class="bi bi-pencil"></i>
+                    </a>
+                    <a href="{% url 'update_stock' p.id %}" class="btn btn-sm btn-success action-btn">
+                      <i class="bi bi-arrow-repeat"></i>
+                    </a>
+                    <a href="{% url 'delete_product' p.id %}" class="btn btn-sm btn-outline-danger action-btn">
+                      <i class="bi bi-trash"></i>
+                    </a>
+                  </td>
+                </tr>
+                {% empty %}
+                <tr>
+                  <td colspan="6" class="text-center text-muted">No products yet.</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+
+          <div class="text-end">
+            <a href="{% url 'list_products' %}" class="btn btn-link fw-semibold">
+              View all products →
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sidebar -->
+    <div class="col-md-4">
+
+      <div class="card shadow-sm rounded-4 mb-4">
+        <div class="card-body">
+          <h6 class="fw-bold mb-3">⚡ Quick Actions</h6>
+          <div class="d-grid gap-2">
+            <a href="{% url 'add_product' %}" class="btn btn-success btn-sm">Add Product</a>
+            <a href="{% url 'list_products' %}" class="btn btn-outline-success btn-sm">Manage Products</a>
+            <a href="{% url 'track_orders' %}" class="btn btn-outline-primary btn-sm">Track Orders</a>
+            <a href="{% url 'customer_queries' %}" class="btn btn-outline-warning btn-sm">Customer Queries</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="card shadow-sm rounded-4">
+        <div class="card-body">
+          <h6 class="fw-bold">💡 Tips</h6>
+          <p class="small text-muted mb-0">
+            Keep stock updated and respond quickly — customers trust active farmers.
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Styles -->
+<style>
+.stat-card {
+  border-radius: 20px;
+  transition: 0.3s ease;
+}
+.stat-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 25px rgba(0,0,0,0.15);
+}
+.stat-link {
+  font-weight: 600;
+  text-decoration: none;
+  color: #198754;
+}
+.stat-link:hover {
+  text-decoration: underline;
+}
+.action-btn {
+  border-radius: 50%;
+}
+.add-btn {
+  border-radius: 30px;
+}
+</style>
+
+{% endblock %}

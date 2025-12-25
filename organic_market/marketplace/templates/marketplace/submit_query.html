@@ -1,0 +1,13 @@
+{% extends 'marketplace/base.html' %}
+
+{% block title %}Submit Query{% endblock %}
+
+{% block content %}
+<h2>Submit Query for {{ product.name }}</h2>
+
+<form method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-success">Submit</button>
+</form>
+{% endblock %}

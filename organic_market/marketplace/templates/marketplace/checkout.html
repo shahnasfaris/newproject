@@ -1,0 +1,26 @@
+{% extends 'marketplace/base.html' %}
+{% block title %}Checkout{% endblock %}
+
+{% block content %}
+<h2>Checkout</h2>
+
+<form method="POST">
+    {% csrf_token %}
+
+    <!-- Delivery Address -->
+    <div class="mb-3">
+        <label class="form-label">Delivery Address</label>
+        {{ form.address }}
+    </div>
+
+    <!-- Payment Method -->
+    <div class="mb-3">
+        <label class="form-label">Payment Method</label>
+        {{ payment_form.method }}
+        <small class="form-text text-muted">Choose "Pay Online" to pay via card.</small>
+    </div>
+
+    <!-- Place Order Button -->
+    <button class="btn btn-success">Place Order</button>
+</form>
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends 'marketplace/base.html' %}
+
+{% block content %}
+<h2>Customer Queries</h2>
+
+{% if queries %}
+<table class="table table-bordered">
+    <tr>
+        <th>Product</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Message</th>
+        <th>Date</th>
+    </tr>
+    {% for q in queries %}
+    <tr>
+        <td>{{ q.product.name }}</td>
+        <td>{{ q.name }}</td>
+        <td>{{ q.email }}</td>
+        <td>{{ q.message }}</td>
+        <td>{{ q.created_at }}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% else %}
+<p>No customer queries yet.</p>
+{% endif %}
+
+{% endblock %}
+

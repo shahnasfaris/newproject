@@ -1,0 +1,91 @@
+{% extends 'marketplace/base.html' %}
+{% load static %}
+{% block title %}Login{% endblock %}
+
+{% block content %}
+<div class="container">
+
+  <div class="row justify-content-center align-items-center" style="min-height: 80vh;">
+    <div class="col-md-6 col-lg-5">
+
+      <!-- Login Card -->
+      <div class="card login-card shadow-lg border-0">
+        <div class="card-body p-4 p-md-5">
+
+          <!-- Header -->
+          <div class="text-center mb-4">
+            <div class="login-icon mb-2">
+              <i class="bi bi-person-circle"></i>
+            </div>
+            <h3 class="fw-bold text-success">Welcome Back</h3>
+            <p class="text-muted">Login to continue</p>
+          </div>
+
+          <!-- Form -->
+          <form method="POST">
+            {% csrf_token %}
+
+            <!-- Username -->
+            <div class="mb-3">
+              <label class="form-label fw-semibold">Username</label>
+              {{ form.username }}
+            </div>
+
+            <!-- Password -->
+            <div class="mb-4">
+              <label class="form-label fw-semibold">Password</label>
+              {{ form.password }}
+            </div>
+
+            <!-- Submit -->
+            <button type="submit" class="btn btn-success w-100 btn-lg shadow-sm">
+              <i class="bi bi-box-arrow-in-right"></i> Login
+            </button>
+
+          </form>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Custom Styles -->
+<style>
+/* Page Background */
+body {
+  background: linear-gradient(135deg, #e8f5e9, #f1f8e9);
+}
+
+/* Card */
+.login-card {
+  border-radius: 25px;
+  background: linear-gradient(180deg, #ffffff, #f8fff8);
+}
+
+/* Icon */
+.login-icon {
+  font-size: 3rem;
+  color: #198754;
+}
+
+/* Inputs */
+.login-card input {
+  border-radius: 12px;
+  padding: 10px 14px;
+}
+
+.login-card input:focus {
+  border-color: #198754;
+  box-shadow: 0 0 0 0.2rem rgba(25,135,84,.25);
+}
+
+/* Button hover */
+.btn-success:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 18px rgba(25,135,84,.3);
+}
+</style>
+
+{% endblock %}

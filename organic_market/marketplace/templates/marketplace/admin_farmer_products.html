@@ -1,0 +1,48 @@
+{% extends 'marketplace/base.html' %}
+{% block title %}Farmer Products{% endblock %}
+
+{% block content %}
+<h2>Products by {{ farmer.username }}</h2>
+
+<a href="{% url 'manage_farmers' %}" class="btn btn-secondary mb-3">
+    ← Back to Farmers
+</a>
+
+<table class="table table-bordered table-hover">
+    <thead class="table-dark">
+        <tr>
+            <th>Product Name</th>
+            <th>Price</th>
+            <th>Stock</th>
+            <th>Status</th>
+            <th>Created</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for p in products %}
+        <tr>
+            <td>{{ p.name }}</td>
+            <td>₹ {{ p.price }}</td>
+            <td>{{ p.stock }}</td>
+            <td>
+                {% if p.status == 'approved' %}
+                    <span class="badge bg-success">Approved</span>
+                {% elif p.status == 'pending' %}
+                    <span class="badge bg-warning text-dark">Pending</span>
+                {% else %}
+                    <span class="badge bg-danger">Rejected</span>
+                {% endif %}
+            </td>
+            <td>{{ p.created_at|date:"d M Y" }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="5" class="text-center">
+                No products found for this farmer
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

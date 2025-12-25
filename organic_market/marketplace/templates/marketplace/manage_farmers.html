@@ -1,0 +1,59 @@
+{% extends 'marketplace/base.html' %}
+{% block title %}Manage Farmers{% endblock %}
+
+{% block content %}
+<h2>Farmers</h2>
+
+<table class="table table-bordered table-hover">
+  <thead class="table-dark">
+    <tr>
+      <th>Username</th>
+      <th>Email</th>
+      <th>Status</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    {% for f in farmers %}
+      <tr>
+        <td>{{ f.username }}</td>
+        <td>{{ f.email }}</td>
+
+        <td>
+          {% if f.is_active %}
+            <span class="badge bg-success">Active</span>
+          {% else %}
+            <span class="badge bg-danger">Blocked</span>
+          {% endif %}
+        </td>
+
+        <td>
+          <!-- Block / Unblock -->
+          <a href="{% url 'admin_toggle_user' f.id %}"
+             class="btn btn-warning btn-sm">
+             {% if f.is_active %}Block{% else %}Unblock{% endif %}
+          </a>
+
+          <!-- View Products -->
+          <a href="{% url 'admin_farmer_products' f.id %}"
+             class="btn btn-info btn-sm">
+             Products
+          </a>
+
+          <!-- Delete -->
+          <a href="{% url 'admin_delete_user' f.id %}"
+             class="btn btn-danger btn-sm"
+             onclick="return confirm('Delete this farmer permanently?')">
+             Delete
+          </a>
+        </td>
+      </tr>
+    {% empty %}
+      <tr>
+        <td colspan="4" class="text-center">No farmers found</td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

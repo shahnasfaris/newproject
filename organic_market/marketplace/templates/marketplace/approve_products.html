@@ -1,0 +1,32 @@
+{% extends 'marketplace/base.html' %}
+{% block title %}Approve Products{% endblock %}
+{% block content %}
+<h2>Pending Products</h2>
+<table class="table">
+    <thead><tr><th>Farmer</th><th>Name</th><th>Price</th><th>Stock</th><th>Action</th></tr></thead>
+    <tbody>
+    {% for p in pending %}
+      <tr>
+        <td>{{ p.farmer.username }}</td>
+        <td>{{ p.name }}</td>
+        <td>${{ p.price }}</td>
+        <td>{{ p.stock }}</td>
+        <td>
+          <form method="post" style="display:inline;">
+            {% csrf_token %}
+            <input type="hidden" name="product_id" value="{{ p.id }}">
+            <button name="action" value="approve" class="btn btn-success btn-sm">Approve</button>
+          </form>
+          <form method="post" style="display:inline;">
+            {% csrf_token %}
+            <input type="hidden" name="product_id" value="{{ p.id }}">
+            <button name="action" value="reject" class="btn btn-danger btn-sm">Reject</button>
+          </form>
+        </td>
+      </tr>
+    {% empty %}
+      <tr><td colspan="5">No pending products.</td></tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
