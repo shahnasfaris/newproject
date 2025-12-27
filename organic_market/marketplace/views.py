@@ -290,7 +290,11 @@ def add_to_cart(request, product_id):
 def cart_view(request):
     cart_items = CartItem.objects.filter(customer=request.user)
     total = sum(item.total_price for item in cart_items)
-    return render(request, 'marketplace/cart.html', {'cart_items': cart_items, 'total': total})
+    return render(request, 'marketplace/cart.html', {
+        'cart_items': cart_items,
+        'total': total
+    })
+
 
 
 @login_required
