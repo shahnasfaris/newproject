@@ -18,18 +18,26 @@
         {% for item in cart_items %}
         <tr>
             <td>{{ item.product.name }}</td>
+
             <td>
-                <form action="{% url 'update_cart' item.id %}" method="POST">
+                <form action="{% url 'update_cart' item.id %}" method="POST" class="d-flex">
                     {% csrf_token %}
-                    <input type="number" name="quantity" value="{{ item.quantity }}" class="form-control w-50">
+                    <input type="number"
+                           name="quantity"
+                           value="{{ item.quantity }}"
+                           min="1"
+                           class="form-control w-50 me-2">
+                    <button type="submit" class="btn btn-primary btn-sm">Update</button>
+                </form>
             </td>
+
             <td>${{ item.product.price }}</td>
             <td>${{ item.total_price }}</td>
-            <td>
-                    <button class="btn btn-primary btn-sm">Update</button>
-                </form>
 
-                <a href="{% url 'remove_cart' item.id %}" class="btn btn-danger btn-sm mt-2">Remove</a>
+            <td>
+                <a href="{% url 'remove_cart' item.id %}" class="btn btn-danger btn-sm">
+                    Remove
+                </a>
             </td>
         </tr>
         {% endfor %}
@@ -37,7 +45,7 @@
 </table>
 
 <div class="text-end">
-    <h4>Grand Total: ${{ total_amount }}</h4>
+    <h4>Grand Total: ${{ total }}</h4>
     <a href="{% url 'checkout' %}" class="btn btn-success">Checkout</a>
 </div>
 
