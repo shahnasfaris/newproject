@@ -57,14 +57,9 @@ def register_view(request):
     if request.method == 'POST':
         form = UserRegistrationForm(request.POST)
         if form.is_valid():
-            user = form.save()
-
-            messages.success(
-                request,
-                "Registration successful! Please login using your username and password."
-            )
-
-            return redirect('login')  # or 'home'
+            form.save()
+            messages.success(request, "Registration successful! Please login.")
+            return redirect('login')
     else:
         form = UserRegistrationForm()
 
