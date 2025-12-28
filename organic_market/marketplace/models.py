@@ -10,16 +10,7 @@ class User(AbstractUser):
         ('farmer', 'Farmer'),
         ('customer', 'Customer'),
     )
-    role = models.CharField(max_length=10, choices=ROLE_CHOICES, default='customer')
-
-    def is_farmer(self):
-        return self.role == 'farmer'
-
-    def is_customer(self):
-        return self.role == 'customer'
-
-    def is_admin_role(self):
-        return self.role == 'admin'
+    role = models.CharField(max_length=20, choices=ROLE_CHOICES)
 
 
 class Category(models.Model):
