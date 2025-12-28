@@ -23,6 +23,13 @@
             </p>
           </div>
 
+          <!-- 🔴 FORM ERRORS -->
+          {% if form.errors %}
+            <div class="alert alert-danger">
+              {{ form.errors }}
+            </div>
+          {% endif %}
+
           <!-- Form -->
           <form method="POST">
             {% csrf_token %}
@@ -35,6 +42,12 @@
             <div class="mb-3">
               <label class="form-label fw-semibold">Email</label>
               {{ form.email }}
+            </div>
+
+            <!-- Role -->
+            <div class="mb-3">
+              <label class="form-label fw-semibold">Register As</label>
+              {{ form.role }}
             </div>
 
             <div class="mb-3">
@@ -73,40 +86,8 @@
 
 <!-- Custom Styles -->
 <style>
-/* Page Background */
 body {
   background: linear-gradient(135deg, #e8f5e9, #f1f8e9);
-}
-
-/* Card */
-.register-card {
-  border-radius: 28px;
-  background: linear-gradient(180deg, #ffffff, #f8fff8);
-}
-
-/* Icon */
-.register-icon {
-  font-size: 3rem;
-  color: #198754;
-}
-
-/* Inputs */
-.register-card input,
-.register-card select {
-  border-radius: 12px;
-  padding: 10px 14px;
-}
-
-.register-card input:focus,
-.register-card select:focus {
-  border-color: #198754;
-  box-shadow: 0 0 0 0.2rem rgba(25,135,84,.25);
-}
-
-/* Button hover */
-.btn-success:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 18px rgba(25,135,84,.3);
 }
 </style>
 
