@@ -118,6 +118,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 AUTH_USER_MODEL = 'marketplace.User'
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 # Media files (for product images)
 MEDIA_URL = '/media/'
