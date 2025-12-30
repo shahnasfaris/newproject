@@ -3,7 +3,7 @@ from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.db.models import Sum
 from .models import Product, Category, CartItem, Order, OrderItem, Review, User, CustomerQuery
-from .forms import UserRegistrationForm, ProductForm, CheckoutForm, UpdateStockForm, ReviewForm, CategoryForm
+from .forms import UserRegistrationForm, ProductForm, CheckoutForm, UpdateStockForm, ReviewForm, CategoryForm,CustomerQueryForm
 from django.contrib import messages
 from decimal import Decimal
 from django.utils import timezone
@@ -13,45 +13,13 @@ from django.contrib.auth.forms import AuthenticationForm
 from .forms import CheckoutForm, PaymentForm
 from .models import OrderItem, Payment
 from django.db.models import Avg
-from django.shortcuts import render, get_object_or_404
-from .forms import UserRegistrationForm, ProductForm, CheckoutForm, UpdateStockForm, ReviewForm, CategoryForm, CustomerQueryForm
 from .forms import CustomerQueryForm
-
-
-
 
 
 
 def home(request):
     products = Product.objects.filter(status='approved').order_by('-created_at')[:8]
     return render(request, 'marketplace/home.html', {'products': products})
-
-def products_list(request):
-    qs = Product.objects.filter(status='approved')  # ✅ FIX
-    category_slug = request.GET.get('category')
-    if category_slug:
-        qs = qs.filter(category__slug=category_slug)
-
-    categories = Category.objects.all()
-    return render(request, 'marketplace/products_list.html', {
-        'products': qs,
-        'categories': categories
-    })
-
-
-def product_detail(request, pk):
-    product = get_object_or_404(Product, pk=pk, status='approved')
-
-    reviews = product.reviews.all()
-    avg_rating = reviews.aggregate(avg=Avg('rating'))['avg']
-    avg_rating = round(avg_rating or 0, 1)
-
-    return render(request, 'marketplace/product_detail.html', {
-        'product': product,
-        'reviews': reviews,
-        'avg_rating': avg_rating,
-    })
-
 
 def register_view(request):
     if request.method == 'POST':
@@ -64,6 +32,7 @@ def register_view(request):
         form = UserRegistrationForm()
 
     return render(request, 'marketplace/register.html', {'form': form})
+
 
 
 def login_view(request):
@@ -92,6 +61,37 @@ def dashboard(request):
         return redirect('farmer_dashboard')
     else:
         return redirect('customer_dashboard')
+def products_list(request):
+    qs = Product.objects.filter(status='approved')  # ✅ FIX
+    category_slug = request.GET.get('category')
+    if category_slug:
+        qs = qs.filter(category__slug=category_slug)
+
+    categories = Category.objects.all()
+    return render(request, 'marketplace/products_list.html', {
+        'products': qs,
+        'categories': categories
+    })
+
+
+from django.db.models import Avg
+
+def product_detail(request, pk):
+    product = get_object_or_404(Product, pk=pk, status='approved')
+
+    reviews = product.reviews.all()
+    avg_rating = reviews.aggregate(avg=Avg('rating'))['avg']
+    avg_rating = round(avg_rating or 0, 1)
+
+    queries = CustomerQuery.objects.filter(product=product).order_by('-created_at')
+
+    return render(request, 'marketplace/product_detail.html', {
+        'product': product,
+        'reviews': reviews,
+        'avg_rating': avg_rating,
+        'queries': queries,   # ✅ FIX
+    })
+
 
 # Admin
 def admin_required(user):
@@ -246,9 +246,6 @@ def respond_query(request, pk):
     return render(request, 'marketplace/respond_query.html', {'q': q})
 
 # Customer
-# views.py
-from django.shortcuts import render
-from .models import Product
 
 def customer_dashboard(request):
     products = Product.objects.filter(status='approved')  # ✅ FIX
@@ -280,13 +277,6 @@ def add_to_cart(request, product_id):
         cart_item.save()
 
     return redirect('customer_dashboard')
-
-
-
-
-
-
-
 @login_required
 def cart_view(request):
     cart_items = CartItem.objects.filter(customer=request.user)
@@ -295,9 +285,6 @@ def cart_view(request):
         'cart_items': cart_items,
         'total': total
     })
-
-
-
 @login_required
 def update_cart(request, item_id):
     item = get_object_or_404(CartItem, id=item_id, customer=request.user)
@@ -392,7 +379,6 @@ def cart(request):
     return render(request, 'marketplace/cart.html', {'cart_items': cart_items, 'total': total})
 
 # Checkout view
-# views.py
 
 @login_required
 def checkout(request):
@@ -480,7 +466,7 @@ def admin_customer_orders(request, customer_id):
         'customer': customer,
         'orders': orders
     })
-from django.db.models import Sum
+
 
 @user_passes_test(admin_required)
 def manage_customers(request):
@@ -508,11 +494,7 @@ def admin_toggle_customer(request, customer_id):
     customer.is_active = not customer.is_active
     customer.save()
     return redirect('manage_customers')
-from django.db.models import Sum
-from django.contrib.auth.decorators import user_passes_test
 
-from django.db.models import Sum
-from django.contrib.auth.decorators import user_passes_test
 
 @user_passes_test(admin_required)
 def manage_customers(request):
@@ -582,3 +564,5 @@ def customer_queries(request):
     return render(request, 'marketplace/farmer_queries.html', {
         'queries': queries
     })
+
+   
